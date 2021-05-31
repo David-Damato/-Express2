@@ -12,6 +12,8 @@ connection.connect((err) => {
     }
 });
 
+app.use(express.json());
+
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
@@ -25,3 +27,33 @@ app.get('/api/movies', (req, res) => {
         }
     });
 });
+
+app.post('/api/movies', (req, res) => {
+    const { title, director, year, color, duration } = req.body;
+    connection.query(
+        'INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)',
+        [title, director, year, color, duration],
+        (err, result) => {
+            if (err) {
+                res.status(500).send('Error saving the movie');
+            } else {
+                res.status(201).send('Movie successfully saved');
+            }
+        }
+    );
+});
+
+app.post('/api/users', (req, res) => {
+    const { firstname, lastname, email } = req.body;
+    connection.query(
+        'INSERT INTO users(firstname, lastname, email) VALUES (?, ?, ?)',
+        [firstname, lastname, email],
+        (err, result) => {
+            if (err) {
+                res.status(500).send('Error saving the user');
+            } else {
+                res.status(201).send('User successfully saved');
+            }
+        }
+    )
+})
