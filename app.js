@@ -44,9 +44,9 @@ app.post('/api/movies', (req, res) => {
 });
 
 app.post('/api/users', (req, res) => {
-    const { firstname, lastname, email } = req.body;
+    const { fistname, lastname, email } = req.body;
     connection.query(
-        'INSERT INTO users(firstname, lastname, email) VALUES (?, ?, ?)',
+        'INSERT INTO movies(firstname, lastname, email) VALUES (?, ?, ?)',
         [firstname, lastname, email],
         (err, result) => {
             if (err) {
@@ -55,5 +55,26 @@ app.post('/api/users', (req, res) => {
                 res.status(201).send('User successfully saved');
             }
         }
-    )
-})
+    );
+});
+
+
+app.put('/api/movies/:id', (req, res) => {
+
+    const moviesId = req.params.id;
+
+    const userPropsToUpdate = req.body;
+
+    connection.query(
+        'UPDATE movies SET ? WHERE id = ?',
+        [userPropsToUpdate, moviesId],
+        (err) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send('Error updating a user');
+            } else {
+                res.status(200).send('Movies updated successfully 🎉');
+            }
+        }
+    );
+});
